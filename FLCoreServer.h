@@ -274,7 +274,7 @@ public:
 
 struct CollisionGroupDescList
 {
-	st6::list<CollisionGroupDesc> data;
+	std::list<CollisionGroupDesc> data;
 };	
 
 struct FLString
@@ -498,7 +498,7 @@ struct IMPORT StarSystem
 public:
 	uint vftable; //0
 	uint dunno0; //4
-	st6::list<Observer> observerList; //8
+	std::list<Observer> observerList; //8
 	uint dunno1[8]; //20, first 3 elements are another st6list
 	MetaList shipList; // 52/13
 	MetaList lootList; // 72/18

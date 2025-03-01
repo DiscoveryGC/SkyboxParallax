@@ -1,5 +1,4 @@
 #include <windows.h>
-#include <unordered_map>
 #include "FLCoreCommon.h"
 #include "FLCoreServer.h"
 
@@ -17,11 +16,18 @@ DWORD dummy;
 
 struct SystemBackground
 {
-	float scale = 0.0f;
-	Vector offset = { 0,0,0 };
+	float scale;
+	Vector offset;
+	SystemBackground()
+	{
+		scale = 0;
+		offset.x = 0;
+		offset.y = 0;
+		offset.z = 0;
+	}
 };
 
-std::unordered_map<uint, SystemBackground> SystemStructs;
+std::map<uint, SystemBackground> SystemStructs;
 
 void LoadConfigFile()
 {
@@ -56,7 +62,9 @@ void LoadConfigFile()
 				}
 				else if (ini.is_value("offset"))
 				{
-					settings.offset = { ini.get_value_float(0), ini.get_value_float(1), ini.get_value_float(2) };
+					settings.offset.x = ini.get_value_float(0);
+					settings.offset.y = ini.get_value_float(1);
+					settings.offset.z = ini.get_value_float(2);
 				}
 			}
 			settings.scale = modelSize / systemSize;
@@ -84,7 +92,7 @@ void CalculateSkyboxCamera()
 	if (*SystemNickname != currentSystem)
 	{
 		currentSystem = *SystemNickname;
-		std::unordered_map<uint, SystemBackground>::iterator systemData = SystemStructs.find(*SystemNickname);
+		std::map<uint, SystemBackground>::iterator systemData = SystemStructs.find(*SystemNickname);
 		if(systemData != SystemStructs.end())
 		{
 			scaleMod = systemData->second.scale;
@@ -93,7 +101,9 @@ void CalculateSkyboxCamera()
 		else
 		{
 			scaleMod = 0.f;
-			offset = { 0,0,0 };
+			offset.x = 0.0f;
+			offset.y = 0.0f;
+			offset.z = 0.0f;
 		}
 	}
 
@@ -104,7 +114,7 @@ void CalculateSkyboxCamera()
 	skyboxCamera.z = (offset.z + CameraCoords->z) * scaleMod;
 }
 
-constexpr int SkyboxFLMatReturn = 0x66FE614;
+static const int SkyboxFLMatReturn = 0x66FE614;
 NAKED
 void SkyboxCameraHook()
 {

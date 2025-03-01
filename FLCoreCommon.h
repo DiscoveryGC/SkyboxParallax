@@ -19,12 +19,6 @@ typedef unsigned char uchar;
 typedef unsigned short ushort;
 typedef unsigned long ulong;
 typedef unsigned __int64 mstime;
-#define ST6_ALLOCATION_DEFINED
-using st6_malloc_t = void* (*)(size_t);
-using st6_free_t = void(*)(void*);
-IMPORT st6_malloc_t st6_malloc;
-IMPORT st6_free_t st6_free;
-#include "st6.h"
 
 #include "FLCoreDefs.h"
 #include <string>
@@ -1188,7 +1182,7 @@ public:
 	float start_room;
 	float price_variance;
 	float ship_repair_cost;
-	st6::map<unsigned int,struct MarketGoodInfo> market_map;
+	std::map<unsigned int,struct MarketGoodInfo> market_map;
 };
 
 class IMPORT BaseDataList
@@ -2514,7 +2508,7 @@ struct Barrel
 class IMPORT CELauncher : public CAttachedEquip
 {
 public:
-	enum class FireResult
+	enum FireResult
 	{
 		ObjectIsDestroyed = 0,
 		ObjectIsDisabled = 1,
@@ -4049,7 +4043,7 @@ public:
 	struct EquipDesc const * traverse_equipment_type(unsigned int,struct EquipDesc const *)const ;
 
 public:
-	st6::list<EquipDesc> equip;
+	std::list<EquipDesc> equip;
 };
 
 struct IMPORT EquipDescVector
